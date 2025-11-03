@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-node@v5
       with:
         node-version: 22
-        
+
     - name: Fix Playwright permissions
       run: chmod +x node_modules/.bin/playwright
 
@@ -25,6 +25,9 @@ jobs:
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
+    - name: Fix permissions
+      run: chmod +x node_modules/.bin/serve || true
 
     - name: Run E2E tests
       run: npx playwright test
