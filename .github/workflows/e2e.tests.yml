@@ -16,6 +16,9 @@ jobs:
       uses: actions/setup-node@v5
       with:
         node-version: 22
+        
+    - name: Fix Playwright permissions
+      run: chmod +x node_modules/.bin/playwright
 
     - name: Install dependencies
       run: npm install
