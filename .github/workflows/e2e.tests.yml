@@ -6,6 +6,10 @@ on:
         description: 'Escolha o navegador de sua preferência para os testes (chromium, firefox, webkit)'
         required: true
         default: 'chromium'
+      base_url:
+        description: 'Escolha o ambiente para os testes (local, homolog, production)'
+        required: true
+        default: 'http://localhost:3000'
 jobs:
   test:
     timeout-minutes: 60
@@ -32,7 +36,7 @@ jobs:
       run: chmod +x node_modules/.bin/serve || true
 
     - name: Run E2E tests
-      run: npx playwright test --project=${{ github.event.inputs.browser }}
+      run: BASE_URL=${{ github.event.inputs.base_url }} npx playwright test --project=${{ github.event.inputs.browser }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
