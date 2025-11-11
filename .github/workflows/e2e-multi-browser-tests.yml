@@ -1,0 +1,108 @@
+name: E2E Multi-Browser Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  tests-chromium:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: 22
+
+    - name: Fix Playwright permissions
+      run: chmod +x node_modules/.bin/playwright
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+
+    - name: Fix permissions
+      run: chmod +x node_modules/.bin/serve || true
+
+    - name: Run E2E tests
+      run: npx playwright test --project=chromium
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+
+  tests-firefox:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: 22
+
+    - name: Fix Playwright permissions
+      run: chmod +x node_modules/.bin/playwright
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps firefox
+
+    - name: Fix permissions
+      run: chmod +x node_modules/.bin/serve || true
+
+    - name: Run E2E tests
+      run: npx playwright test --project=firefox
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+
+  tests-webkit:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: 22
+
+    - name: Fix Playwright permissions
+      run: chmod +x node_modules/.bin/playwright
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps webkit
+
+    - name: Fix permissions
+      run: chmod +x node_modules/.bin/serve || true
+
+    - name: Run E2E tests
+      run: npx playwright test --project=webkit
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
