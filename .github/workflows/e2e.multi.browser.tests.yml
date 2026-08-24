@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ multi-browser ]
 jobs:
+  #Testes irão rodar em paralelo para cada navegador (Chromium, Firefox e Webkit)
   # Testes no Chromium
   tests-chromium:
     timeout-minutes: 60
